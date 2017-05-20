@@ -2,17 +2,18 @@ import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
-app = Flask(__name__) #instantiates application
+app = Flask(__name__) #instantiates as class Flask, name = name of document 
 app.config.from_object(__name__) #Load config from this, flaskr.py
 
-app.config.update(dict(
+app.config.update(dict( #sets important information about app
     DATABASE=os.path.join(app.root_path, 'flaskr.db'),
     SECRET_KEY = 'development key',
     USERNAME = 'admin',
     PASSWORD = 'default'
 ))
 
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+app.config.from_envvar('FLASKR_SETTINGS', silent=True) #settings in this file override those in this file
+
 
 def connect_db():
     '''connects to specified database)'''
@@ -21,7 +22,7 @@ def connect_db():
     rv.row_factory = sqlite3.Row
     return rv
 
-def init_db():
+def init_db(): #establishes the location of our database.
     db = get_db()
     with app.open_resource('schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
@@ -34,7 +35,7 @@ def initdb_command():
     init_db()
     print('Initialized database')
 
-def get_db():
+def get_db(): 
     '''Opens a new database connection if there isn't already one.'''
     if not hasattr(g, 'sqlite_db'):
         g.sqlite_db = connect_db()
